@@ -1,0 +1,8 @@
+
+/docs/exemplars
+.DS_Store
+/.ipynb_checkpoints
+data/incidents_clean.csv
+data/Police_Department_Incident_Reports__2018_to_Present_20240910.csv
+/notebooks/.ipynb_checkpoints
+/src/.ipynb_checkpoints
