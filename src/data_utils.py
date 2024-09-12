@@ -3,6 +3,13 @@ import numpy as np
 
 import datetime
 
+
+# import project utils
+import sys
+sys.path.append('../src')
+
+
+
 def generate_clean_csv(infile, outfile, debug=False):
     """
     :param infile: File to read with raw data
@@ -112,29 +119,65 @@ def generate_sample_file(infile, outfile_prefix, frac=0.1, random_state=42):
     print('Done')
 
 
+def preprocess_drop_cols(df):
+    try:
+        # Get rid of columns that were introduced as part of creating the sample files
+        sampling_unwanted_cols = ['Unnamed: 0']
+        for col in sampling_unwanted_cols:
+            df.drop(columns=col, inplace=True)
+    
+    except:
+        print(f'... preprocess_drop_cols: {repr(sys.exception())}')
+    
+    finally:
+        drop_cols = ['report_datetime', # redundant
+                     'row_id',
+                     'incident_id', 'incident_number',
+                     'cad_number',
+                     'latitude', 'longitude', 'point',  
+                     'esncag_-_boundary_file',
+                     'central_market/tenderloin_boundary_polygon_-_updated', 
+                     'civic_center_harm_reduction_project_boundary',
+                     'hsoc_zones_as_of_2018-06-05',
+                     'invest_in_neighborhoods_(iin)_areas'
+                    ]
+        df.drop(columns=drop_cols, inplace=True)
+
+    return df
+
+
+
 def get_clean_data_from_csv(infile):
     """
     :param infile: CSV file to read data from
-    :return: Returns DataFrame with index set to the datetime column
+    :return: Returns 2 DataFrames raw_df and clean_df with index set to the datetime column
     """
     # Read the file
     print('Reading file: {} ... '.format(infile), end='')
-    clean_df = pd.read_csv(infile)
-    print('Done: {:,d} rows, {:,d} columns'.format(clean_df.shape[0], clean_df.shape[1]))
+    raw_df = pd.read_csv(infile)
+    print('Done: {:,d} rows, {:,d} columns'.format(raw_df.shape[0], raw_df.shape[1]))
     
     # Converting datetime and date to timeseries ...
     print('... Converting datetime and date to timeseries ... ', end='')
-    clean_df.datetime = pd.to_datetime(clean_df.datetime)
-    clean_df.date = pd.to_datetime(clean_df.date)
+    raw_df.datetime = pd.to_datetime(raw_df.datetime)
+    raw_df.date = pd.to_datetime(raw_df.date)
     print('Done')
 
     # set datetime as index to create the timeseries
     print('... Setting index to datetime ... ', end='')
-    clean_df = clean_df.set_index('datetime')
+    raw_df = raw_df.set_index('datetime')
     print('Done')
 
+    # make a full copy
+    print('... Dropping unwanted columns ... ')
+    clean_df = raw_df.copy()
+    print('... Done')
+
+    # Preprocessing steps for clean_df
+    clean_df = preprocess_drop_cols(clean_df)
+    
     print('Done')
 
-    return clean_df
+    return raw_df, clean_df
 
 
