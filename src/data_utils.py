@@ -127,7 +127,7 @@ def preprocess_drop_cols(df):
             df.drop(columns=col, inplace=True)
     
     except:
-        print(f'... preprocess_drop_cols: {repr(sys.exception())}')
+        print(f'... preprocess_drop_cols: Column not found {repr(sys.exception())}')
     
     finally:
         drop_cols = ['report_datetime', # redundant
@@ -139,9 +139,14 @@ def preprocess_drop_cols(df):
                      'central_market/tenderloin_boundary_polygon_-_updated', 
                      'civic_center_harm_reduction_project_boundary',
                      'hsoc_zones_as_of_2018-06-05',
-                     'invest_in_neighborhoods_(iin)_areas'
+                     'invest_in_neighborhoods_(iin)_areas',
                     ]
-        df.drop(columns=drop_cols, inplace=True)
+        for col in drop_cols:
+            try:
+                df.drop(columns=col, inplace=True)
+                print(f'... preprocess_drop_cols: Column {col} dropped')
+            except:
+                print(f'... preprocess_drop_cols: Column {col} not dropped: {repr(sys.exception())}')
 
     return df
 
@@ -169,15 +174,13 @@ def get_clean_data_from_csv(infile):
     print('Done')
 
     # make a full copy
-    print('... Dropping unwanted columns ... ')
     clean_df = raw_df.copy()
-    print('... Done')
 
     # Preprocessing steps for clean_df
+    print('... Dropping unwanted columns ... ')
     clean_df = preprocess_drop_cols(clean_df)
+    print('... Done')
     
     print('Done')
 
     return raw_df, clean_df
-
-
