@@ -119,36 +119,79 @@ def generate_sample_file(infile, outfile_prefix, frac=0.1, random_state=42):
     print('Done')
 
 
-def preprocess_drop_cols(df):
-    try:
-        # Get rid of columns that were introduced as part of creating the sample files
-        sampling_unwanted_cols = ['Unnamed: 0']
-        for col in sampling_unwanted_cols:
+def preprocess_drop_cols(df, drop_cols):
+    """
+    Drops the columns from DF inplace
+
+    :param df: DF to drop columns from
+    :param cols: Columns to drop
+    :returns: Returns the DF to allow pipelining, but the columns are dropped inplace
+    """
+    if len(drop_cols) <= 0 or df is None:
+        return df
+
+        
+    # try:
+    #     # Get rid of columns that were introduced as part of creating the sample files
+    #     sampling_unwanted_cols = ['Unnamed: 0']
+    #     for col in sampling_unwanted_cols:
+    #         df.drop(columns=col, inplace=True)
+    
+    # except:
+    #     print(f'... preprocess_drop_cols: Column not found {repr(sys.exception())}')
+    
+    # finally:
+    #     drop_cols = ['report_datetime', # redundant
+    #                  'row_id',
+    #                  'incident_id', 'incident_number',
+    #                  'cad_number',
+    #                  'latitude', 'longitude', 'point',  
+    #                  'esncag_-_boundary_file',
+    #                  'central_market/tenderloin_boundary_polygon_-_updated', 
+    #                  'civic_center_harm_reduction_project_boundary',
+    #                  'hsoc_zones_as_of_2018-06-05',
+    #                  'invest_in_neighborhoods_(iin)_areas',
+    #                 ]
+    for col in drop_cols:
+        try:
             df.drop(columns=col, inplace=True)
-    
-    except:
-        print(f'... preprocess_drop_cols: Column not found {repr(sys.exception())}')
-    
-    finally:
-        drop_cols = ['report_datetime', # redundant
-                     'row_id',
-                     'incident_id', 'incident_number',
-                     'cad_number',
-                     'latitude', 'longitude', 'point',  
-                     'esncag_-_boundary_file',
-                     'central_market/tenderloin_boundary_polygon_-_updated', 
-                     'civic_center_harm_reduction_project_boundary',
-                     'hsoc_zones_as_of_2018-06-05',
-                     'invest_in_neighborhoods_(iin)_areas',
-                    ]
-        for col in drop_cols:
-            try:
-                df.drop(columns=col, inplace=True)
-                print(f'... preprocess_drop_cols: Column {col} dropped')
-            except:
-                print(f'... preprocess_drop_cols: Column {col} not dropped: {repr(sys.exception())}')
+            print(f'... preprocess_drop_cols: Column {col} dropped')
+        except:
+            print(f'... preprocess_drop_cols: Column {col} not dropped: {repr(sys.exception())}')
 
     return df
+
+
+# def preprocess_drop_cols(df):
+#     try:
+#         # Get rid of columns that were introduced as part of creating the sample files
+#         sampling_unwanted_cols = ['Unnamed: 0']
+#         for col in sampling_unwanted_cols:
+#             df.drop(columns=col, inplace=True)
+    
+#     except:
+#         print(f'... preprocess_drop_cols: Column not found {repr(sys.exception())}')
+    
+#     finally:
+#         drop_cols = ['report_datetime', # redundant
+#                      'row_id',
+#                      'incident_id', 'incident_number',
+#                      'cad_number',
+#                      'latitude', 'longitude', 'point',  
+#                      'esncag_-_boundary_file',
+#                      'central_market/tenderloin_boundary_polygon_-_updated', 
+#                      'civic_center_harm_reduction_project_boundary',
+#                      'hsoc_zones_as_of_2018-06-05',
+#                      'invest_in_neighborhoods_(iin)_areas',
+#                     ]
+#         for col in drop_cols:
+#             try:
+#                 df.drop(columns=col, inplace=True)
+#                 print(f'... preprocess_drop_cols: Column {col} dropped')
+#             except:
+#                 print(f'... preprocess_drop_cols: Column {col} not dropped: {repr(sys.exception())}')
+
+#     return df
 
 
 
@@ -175,12 +218,28 @@ def get_clean_data_from_csv(infile):
 
     # make a full copy
     clean_df = raw_df.copy()
-
-    # Preprocessing steps for clean_df
-    print('... Dropping unwanted columns ... ')
-    clean_df = preprocess_drop_cols(clean_df)
-    print('... Done')
     
     print('Done')
 
     return raw_df, clean_df
+
+
+
+def preprocess_data(df, drop_cols):
+    """
+    Apply the preprocess steps identified durng EDA
+
+    :param df: DF to run pre-processing steps - done inplace
+    :param drop_cols: Array of columns to drop
+    :returns: Returns pre-processed DF for chaining
+    """
+
+    # Preprocessing steps
+    print('Pre-processing ... ')
+    
+    print('... Dropping unwanted columns ... ')
+    preprocess_drop_cols(df, drop_cols)
+    print('... Done')
+    
+    print('Done')
+    return df
