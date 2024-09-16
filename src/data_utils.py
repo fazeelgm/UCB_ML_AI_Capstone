@@ -222,7 +222,7 @@ def preprocess_data(df, drop_cols=None):
                           'civic_center_harm_reduction_project_boundary','hsoc_zones_as_of_2018-06-05',
                           'invest_in_neighborhoods_(iin)_areas',
                           'report_type_code', 'report_type_description', 'filed_online',
-                          'intersection', 'cnn', 'point',
+                          'intersection', 'cnn', 'point', 'neighborhoods',
                           'supervisor_district', 'supervisor_district_2012', 'current_supervisor_districts',
                          ]
     drop_cols_incident = ['incident_datetime', 'report_datetime', 
