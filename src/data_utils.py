@@ -222,7 +222,7 @@ def preprocess_data(df, drop_cols=None):
                           'civic_center_harm_reduction_project_boundary','hsoc_zones_as_of_2018-06-05',
                           'invest_in_neighborhoods_(iin)_areas',
                           'report_type_code', 'report_type_description', 'filed_online',
-                          'intersection', 'cnn', 'point', 'neighborhoods',
+                          'intersection', 'cnn', 'point',
                           'supervisor_district', 'supervisor_district_2012', 'current_supervisor_districts',
                          ]
     drop_cols_incident = ['incident_datetime', 'report_datetime', 
@@ -230,7 +230,9 @@ def preprocess_data(df, drop_cols=None):
                           'incident_subcategory', 'incident_description'
                          ]
     drop_cols_pd = ['current_police_districts']
-    drop_cols_all = drop_cols_unwanted + drop_cols_incident + drop_cols_pd
+    drop_cols_neighborhoods = ['neighborhoods']
+
+    drop_cols_all = drop_cols_unwanted + drop_cols_incident + drop_cols_pd + drop_cols_neighborhoods
     
     # Preprocessing steps
     print('Pre-processing ... ')
@@ -253,7 +255,12 @@ def preprocess_data(df, drop_cols=None):
     df = df.query('resolution != "Unfounded" and resolution != "Exceptional Adult"')
     print('... Removing police_district types: "Out of SF" ... ')
     df = df.query('police_district != "Out of SF"')
+
+    # Rename columns
+    print('... Renaming column: "analysis_neighborhood" -> "neighborhood" ... ')
+    df = df.rename(columns={'analysis_neighborhood':'neighborhood'})
     
+    # Drop nulls
     print('... Removing rows with nulls (dropna) ... ')
     df = df.dropna()
     print('... Done')        
