@@ -225,21 +225,75 @@ def get_clean_data_from_csv(infile):
 
 
 
-def preprocess_data(df, drop_cols):
+# def preprocess_data(df, drop_cols):
+#     """
+#     Apply the preprocess steps identified durng EDA
+
+#     :param df: DF to run pre-processing steps - done inplace
+#     :param drop_cols: Array of columns to drop
+#     :returns: Returns pre-processed DF for chaining
+#     """
+
+#     # Preprocessing steps
+#     print('Pre-processing ... ')
+    
+#     print('... Dropping unwanted columns ... ')
+#     preprocess_drop_cols(df, drop_cols)
+#     print('... Done')
+    
+#     print('Done')
+#     return df
+
+def preprocess_data(df, drop_cols=None):
     """
     Apply the preprocess steps identified durng EDA
 
     :param df: DF to run pre-processing steps - done inplace
-    :param drop_cols: Array of columns to drop
     :returns: Returns pre-processed DF for chaining
     """
 
+    drop_cols_unwanted = ['Unnamed: 0', 
+                          'esncag_-_boundary_file', 'central_market/tenderloin_boundary_polygon_-_updated',  
+                          'civic_center_harm_reduction_project_boundary','hsoc_zones_as_of_2018-06-05',
+                          'invest_in_neighborhoods_(iin)_areas',
+                          'report_type_code', 'report_type_description', 'filed_online',
+                          'intersection', 'cnn', 'point',
+                          'supervisor_district', 'supervisor_district_2012', 'current_supervisor_districts',
+                         ]
+    drop_cols_incident = ['incident_datetime', 'report_datetime', 
+                          'incident_id', 'incident_code', 'row_id', 'incident_number', 'cad_number',
+                          'incident_subcategory', 'incident_description'
+                         ]
+    drop_cols_pd = ['current_police_districts']
+    drop_cols_all = drop_cols_unwanted + drop_cols_incident + drop_cols_pd
+    
     # Preprocessing steps
     print('Pre-processing ... ')
-    
+
     print('... Dropping unwanted columns ... ')
-    preprocess_drop_cols(df, drop_cols)
-    print('... Done')
+    if (drop_cols is not None):
+        preprocess_drop_cols(df, drop_cols)
+        print('... Done')
+        return df
+
+    # OK, we're pro-processing the raw data in full
+    raw_shape = df.shape
     
-    print('Done')
+    # Drop all unwanted columns
+    preprocess_drop_cols(df, drop_cols_all)
+    print('... Done')
+
+    # Remove the undesired data found in EDA
+    print('... Removing resolution types: "Unfounded", "Exceptional Adult" ... ')
+    df = df.query('resolution != "Unfounded" and resolution != "Exceptional Adult"')
+    print('... Removing police_district types: "Out of SF" ... ')
+    df = df.query('police_district != "Out of SF"')
+    
+    print('... Removing rows with nulls (dropna) ... ')
+    df.dropna(inplace=True)
+    print('... Done')        
+
+    reduction = raw_shape[0] - df.shape[0]
+    reduction_p = (reduction / raw_shape[0]) * 100
+    print(f'Done: Start: {raw_shape}, End: {df.shape} -> Rows removed: {reduction:,d} rows ({reduction_p:,.2f}%)')
     return df

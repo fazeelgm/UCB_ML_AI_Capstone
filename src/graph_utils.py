@@ -1,5 +1,10 @@
 import matplotlib.pyplot as plt
 
+
+# Global declarations
+page_width = 9
+
+
 def graph_features(df, nrows, ncols, figsize=(7,7)):
     """
     Graph all the DataFrame columns as subplots to quickly visualize the features 
