@@ -42,11 +42,11 @@ def generate_clean_csv(infile, outfile, debug=False):
 
     # Create two new datetime and date columns with clean dates
     # raw_df['datetime'] = pd.to_datetime(df.incident_datetime, format='%Y/%m/%d %I:%M:%S %p')
-    print('... Creating timeseries columns: datetime and date ... ')
+    print('... Creating timeseries columns: datetime ... ')
     raw_df['datetime'] = pd.to_datetime(raw_df.incident_datetime, format='mixed')
-    raw_df['date'] = pd.to_datetime(raw_df.incident_date, format='mixed')
+    # raw_df['date'] = pd.to_datetime(raw_df.incident_date, format='mixed')
     print('...... Number of rows where the datetime conversion failed: {:,d}'.format(raw_df.datetime.isnull().sum()))
-    print('...... Number of rows where the date conversion failed: {:,d}'.format(raw_df.date.isnull().sum()))
+    # print('...... Number of rows where the date conversion failed: {:,d}'.format(raw_df.date.isnull().sum()))
     print('...... Timespan: {} - {}'.format(raw_df.datetime.min(), raw_df.datetime.max()))    
     print('... Done')
 
@@ -191,9 +191,9 @@ def get_clean_data_from_csv(infile):
     print('Done: {:,d} rows, {:,d} columns'.format(raw_df.shape[0], raw_df.shape[1]))
     
     # Converting datetime and date to timeseries ...
-    print('... Converting datetime and date to timeseries ... ', end='')
+    print('... Converting datetime to timeseries ... ', end='')
     raw_df.datetime = pd.to_datetime(raw_df.datetime)
-    raw_df.date = pd.to_datetime(raw_df.date)
+    # raw_df.date = pd.to_datetime(raw_df.date)
     print('Done')
 
     # set datetime as index to create the timeseries
@@ -259,6 +259,13 @@ def preprocess_data(df, drop_cols=None):
     # Rename columns
     print('... Renaming column: "analysis_neighborhood" -> "neighborhood" ... ')
     df = df.rename(columns={'analysis_neighborhood':'neighborhood'})
+    print('... Renaming columns: Dropping "incident_*" from column names ... ')
+    df = df.rename(columns={'incident_date':'date',
+                            'incident_time':'time',
+                            'incident_year':'year',
+                            'incident_day_of_week':'day_of_week',
+                            'incident_category':'category'
+                           })
     
     # Drop nulls
     print('... Removing rows with nulls (dropna) ... ')

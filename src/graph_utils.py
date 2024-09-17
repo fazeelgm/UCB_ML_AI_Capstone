@@ -1,9 +1,11 @@
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 # Global declarations
 page_width = 9
 
+sns.set_theme(style='darkgrid')
 
 def graph_features(df, nrows, ncols, figsize=(7,7)):
     """
