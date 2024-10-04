@@ -13,9 +13,13 @@ class Config:
     RANDOM_STATE = 42
 
     # DATA & SAMPLE FILES
-    CURR_RAW_FILE = '../data/Police_Department_Incident_Reports__2018_to_Present_20240910.csv'
+    # CURR_RAW_FILE = '../data/Police_Department_Incident_Reports__2018_to_Present_20240910.csv'
+    CURR_RAW_FILE = '../data/Police_Department_Incident_Reports__2018_to_Present_20241003.csv'
     CURR_CLEAN_FILE = '../data/incidents_clean.csv'
-    
+
+    # Used to suppress image files from getting generated - speeds full runs
+    SUPPRESS_OUTPUT_FILES=False
+
 
 def generate_clean_csv(infile, outfile, debug=False):
     """
@@ -157,7 +161,6 @@ def select_sample_csv_file(pct=None):
     return sample_file
 
 
-
 def preprocess_drop_cols(df, drop_cols):
     """
     Drops the columns from DF inplace
@@ -207,6 +210,28 @@ def get_clean_data_from_csv(infile):
     print('Done')
 
     return raw_df, clean_df
+
+
+
+def fix_data_artifacts(df):
+    """
+    Fix any data artifacts that were identified durng EDA - changes are IN-PLACE
+
+    :param df: DF to run pre-processing steps
+    :returns: Returns pre-processed DF for chaining
+    """
+    print('Fixing data artifacts (in-place) ... ')
+
+    print('... Category column:\n    ...\"Human Trafficking*\"\n    ...\"Motor Vehicle Theft\"\n    ...\"Weapons Offence\"')
+
+    df.loc[df['category'].astype(str).str.startswith('Human Trafficking'), 'category'] = 'Human Trafficking (Combined)'
+    df.loc[df['category'].astype(str).str.startswith('Motor Vehicle Theft'), 'category'] = 'Motor Vehicle Theft'
+    df.loc[df['category'].astype(str).str.startswith('Weapons Offence'), 'category'] = 'Weapons Offense'
+
+    print('Done')
+
+    return df
+
 
 
 def preprocess_data(df, drop_cols=None):
