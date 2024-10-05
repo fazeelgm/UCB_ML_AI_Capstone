@@ -20,6 +20,9 @@ class Config:
     # Used to suppress image files from getting generated - speeds full runs
     SUPPRESS_OUTPUT_FILES=False
 
+    # Default page width for graphs to use throught the project
+    PAGE_WIDTH=8
+
 
 def generate_clean_csv(infile, outfile, debug=False):
     """

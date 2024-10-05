@@ -6,3 +6,7 @@ data/incidents_clean.csv
 data/Police_Department_Incident_Reports__2018_to_Present_20240910.csv
 /notebooks/.ipynb_checkpoints
 /src/.ipynb_checkpoints
+/data/sf-crime
+/src/__pycache__
+/data_20240910
+/images/.ipynb_checkpoints
