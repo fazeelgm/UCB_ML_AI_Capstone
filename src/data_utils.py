@@ -8,8 +8,16 @@ import datetime
 import sys
 sys.path.append('../src')
 
+# Handle paths
+import pathlib
 
 class Config:
+
+    # Path handling
+    PROJ_DIR = pathlib.Path('..')
+    IMAGE_DIR = PROJ_DIR / 'images'
+
+    # Consistent Random State for the project
     RANDOM_STATE = 42
 
     # DATA & SAMPLE FILES
