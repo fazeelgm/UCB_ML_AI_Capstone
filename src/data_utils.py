@@ -30,6 +30,8 @@ class Config:
 
     # Default page width for graphs to use throught the project
     PAGE_WIDTH=8
+    # TBL_HILITE_COLOR='lightgrey'
+    TBL_HILITE_COLOR='lightblue'
 
 
 def generate_clean_csv(infile, outfile, debug=False):
