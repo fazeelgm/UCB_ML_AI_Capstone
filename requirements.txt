@@ -6,3 +6,4 @@ seaborn
 scikit-learn
 sklearn
 xgboost
+scikit-optimize
