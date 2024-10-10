@@ -314,3 +314,94 @@ def preprocess_data(df, drop_cols=None):
     reduction_p = (reduction / raw_shape[0]) * 100
     print(f'Done: Start: {raw_shape}, End: {df.shape} -> Rows removed: {reduction:,d} rows ({reduction_p:,.2f}%)')
     return df
+
+
+def FE_date(df):
+    """
+    Convert df with DateTime index to new columns ['hour', 'minute', 'day', 'month']
+
+    :param df: Input DataFrame
+    :Returns: Returns the same DataFrame
+    """
+    df['hour'] = df.index.map(lambda x: x.hour)
+    df['minute'] = df.index.map(lambda x: x.minute)
+    df['day'] = df.index.map(lambda x: x.day)
+    df['month'] = df.index.map(lambda x: x.month)
+
+    return df
+
+
+def FE_weekend(df):
+    """
+    Add a new ['weekend'] column to the DF
+
+    :param df: Input DataFrame
+    :Returns: Returns the same DataFrame
+    """
+
+    # Create mask for Sat/Sun
+    weekend_days = {'Monday':0, 'Tuesday':0, 'Wednesday':0, 'Thursday':0, 'Friday':0, 'Saturday':1, 'Sunday':1}
+    
+    df['weekend'] = df.day_of_week.map(lambda x: weekend_days[x])
+    
+    return df
+    
+def FE_season(df):
+    """
+    Add a new ['season'] column to the DF
+
+    :param df: Input DataFrame
+    :Returns: Returns the same DataFrame
+    """
+    # Create mask for seasons
+    seasons = {0:'Winter', 1:'Spring', 2:'Summer', 3:'Fall'}
+    
+    df['season'] = df.month.map(lambda x: seasons[((x % 12) // 3)])
+
+    return df
+
+
+def FE_holiday(df):
+    """
+    Add a new ['holiday'] column to the DF
+
+    :param df: Input DataFrame
+    :Returns: Returns the same DataFrame
+    """
+    from pandas.tseries.holiday import USFederalHolidayCalendar
+    
+    cal = USFederalHolidayCalendar()
+    holidays = cal.holidays(start=df.index.min(), end=df.index.max())
+
+    df['holiday'] = df.index.isin(holidays)
+
+    return df
+
+def apply_synthetic_features(df):
+    """
+    Create new, synthetic features inrtoduced durind EDA:
+
+    1. Add new columns ['hour', 'minute', 'day', 'month']
+    2. Add new weekend column
+    3. Add new season column
+    4. Add new holiday column
+
+    :param df: Input DataFrame to manipulate in-place
+    :returns: Returns same DF
+    """
+
+    print('Generating synthetic feature columns (in-place) ... ')
+
+    print("... Adding columns ['hour', 'minute', 'day', 'month']'")
+    df = FE_date(df)
+    print("... Adding column ['weekend']")
+    df = FE_weekend(df)
+    print("... Adding column ['season']")
+    df = FE_season(df)
+    print("... Adding column ['holiday']")
+    df = FE_holiday(df)
+    print('Done')
+
+    return df
+
+
