@@ -452,3 +452,18 @@ def apply_synthetic_features(df):
     return df
 
 
+def make_prediction(model, input_df):
+    """
+    Predict crime category
+
+    :param model: Trained model
+    :param input_df: [num_samples x num_features] DataFrame containing the input features for the prediction
+
+    :returns: Prediction from the model
+    """
+    
+    # Valid input columns against X_train
+    sample_df = input_df[X_train.columns]
+
+    # Make predictions
+    return model.predict(sample_df)
