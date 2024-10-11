@@ -10,3 +10,7 @@ data/Police_Department_Incident_Reports__2018_to_Present_20240910.csv
 /src/__pycache__
 /data_20240910
 /images/.ipynb_checkpoints
+notebooks/ModelExploration_FriFullRun.ipynb
+notebooks/ModelVisualizations_checkpoint.ipynb
+notebooks/ScratchModels.ipynb
+notebooks/ModelExploration.ipynb_bk
