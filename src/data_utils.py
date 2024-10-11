@@ -301,7 +301,7 @@ def preprocess_data(df, drop_cols=None):
     df = df.rename(columns={'incident_date':'date',
                             'incident_time':'time',
                             'incident_year':'year',
-                            'incident_day_of_week':'day_of_week',
+                            'incident_day_of_week':'dow',
                             'incident_category':'category'
                            })
     
@@ -342,7 +342,7 @@ def FE_weekend(df):
     # Create mask for Sat/Sun
     weekend_days = {'Monday':0, 'Tuesday':0, 'Wednesday':0, 'Thursday':0, 'Friday':0, 'Saturday':1, 'Sunday':1}
     
-    df['weekend'] = df.day_of_week.map(lambda x: weekend_days[x])
+    df['weekend'] = df.dow.map(lambda x: weekend_days[x])
     
     return df
     
@@ -377,6 +377,49 @@ def FE_holiday(df):
 
     return df
 
+tod_dict = {
+    0:'Night',
+    1:'Night',
+    2:'Night',
+    3:'Night',
+    4:'Night',
+    5:'Night',
+    6:'Morning', 
+    7:'Morning', 
+    8:'Morning', 
+    9:'Morning', 
+    10:'Morning', 
+    11:'Morning', 
+    12:'Afternoon', 
+    13:'Afternoon', 
+    14:'Afternoon', 
+    15:'Afternoon', 
+    16:'Afternoon', 
+    17:'Afternoon', 
+    18:'Evening', 
+    19:'Evening', 
+    20:'Evening', 
+    21:'Evening', 
+    22:'Evening', 
+    23:'Evening', 
+    24:'Evening',
+}
+
+def FE_tod(df):
+    """
+    Add a new ['tod'] column to the DF
+
+    :param df: Input DataFrame
+    :Returns: Returns the same DataFrame
+    """
+    # Create mask for seasons
+    seasons = {0:'Winter', 1:'Spring', 2:'Summer', 3:'Fall'}
+    
+    df['tod'] = df.hour.map(lambda x: tod_dict[x])
+
+    return df
+
+
 def apply_synthetic_features(df):
     """
     Create new, synthetic features inrtoduced durind EDA:
@@ -400,6 +443,8 @@ def apply_synthetic_features(df):
     df = FE_season(df)
     print("... Adding column ['holiday']")
     df = FE_holiday(df)
+    print("... Adding column ['tod']")
+    df = FE_tod(df)
     print('Done')
 
     return df
