@@ -16,6 +16,7 @@ class Config:
     # Path handling
     PROJ_DIR = pathlib.Path('..')
     IMAGE_DIR = PROJ_DIR / 'images'
+    DATA_DIR = PROJ_DIR / 'data'
 
     # Consistent Random State for the project
     RANDOM_STATE = 42
