@@ -1,14 +1,37 @@
-### Project Title
+# Are we in a Doom Loop, San Francisco?
+<table style="width:100%"><tr><center><td width="100%">
+  <img src="images/sf_crime_locations_map.png" border="0"/>
+</td></center></tr></table>
 
-**Author**: Fazeel Mufti
+<p align='right'>
+Capstone Project<br>
+UC Berkeley ML/AI Professional Certification coursework<br>
+Fazeel Mufti
+</p>
+  
+**Jupyter Notebooks**
+
+These Jupyter notebooks contain the detailed analysis summarized in this Executive Summary:
+
+* [`ExploratoryDataAnalysis.ipynb`](https://github.com/fazeelgm/UCB_ML_AI_Capstone/blob/main/notebooks/ExploratoryDataAnalysis.ipynb)
+  * Jupyter notebook containing the initial exploratory data analysis (EDA) of the dataset to develop a domain understanding
+  * Includes data retrieval and cleanup required before we can apply DS/ML techniques
+* [`ModelExploration.ipynb`](https://github.com/fazeelgm/UCB_ML_AI_Capstone/blob/main/notebooks/ModelExploration.ipynb)
+  * Jupyter notebook detailing the Data Models that were explored
+  * Includes tuning various classification models and analysis of the wining `XGBClassifier`
+* [`ModelVisualizations.ipynb`](https://github.com/fazeelgm/UCB_ML_AI_Capstone/blob/main/notebooks/ModelVisualizations.ipynb)
+  * Visualizations developed to support the project story line
+* `src` directory: Utility python code for the project
+* `data` directory: You can download this file to play with the data yourself or get the latest from SFGov links below
 
 #### Executive summary
 
-As part of the City of San Francisco's DataSF Project, the San Francisco Police Deparment provides a daily feed of Police Incidents to the public for accountability purposes. This data has been made available since 2018 and provides a snapshot of crimes reported and investigated by the SFPD. Incoming reports are triaged and categorized based on the incident details and resolution. As such, this is a great resource on the makeup of crime in the City, and gives us an opportunity to apply Data Science (DS) and Machine Learning (ML) to analyze trends over a significant period of time.
+I am interested in forecasting and classification problems and use of data for finding solutions to social issues. I came across this daily feed from the SF Police Dept. (SFPD) a few months ago when there was a lot of reporting about San Francisco being in a **_Doom Loop_**. I plan to use this data of triaged crime incidents as a way to train several ML models to classify the crime category based on the historical data being captured by the SFPD, and show the accuracy of my predictions based on the classification by the Police Officers. Our goals are to: 
 
-I am interested in forecasting and classification problems and use of data for social issues. I came across this dataset daily feed from the SF Police Dept. (SFPD) a few months ago when there was a lot of reporting about San Francisco being in a doom-loop, and this dataset was referred to show that things were actually not that bad from a crime lens. I plan to use the triaged crime incidents as a way to train several ML models to predict the likelihood of a crime category occuring in a specific area at a specific time and show the accuracy of my predictions based on the classification by the Police Officers. This will be used as a term project for my UC Berkeley Artificial Inetlligence and Machine Learning Professional Certification.
+1. Classify the crime category based on the historical data categorized by SFPD officers
+1. Learn how machine learning can help predict crime classification and aid police to protect our communities better
 
-#### Rationale
+This will be used as the capstone project for my UC Berkeley Artificial Inetlligence and Machine Learning Professional Certification.
 
 By focusing on crime prediction and hotspot identification, law enforcement can enhance their ability to prevent crime, use resources more efficiently, and build stronger relationships with the communities they serve, ultimately leading to a safer and more secure environment for everyone. The data-driven decision-making approach can benefit the following areas:
 
@@ -19,11 +42,9 @@ By focusing on crime prediction and hotspot identification, law enforcement can 
 * Cross-Departmental Collaboration
 * Emergency Preparedness
   
-#### Research Question
-1. Can we predict the likelihood of a crime occuring in a specific area at a specific time?
-1. Can we identify Hotspots by crime categories?
-
 #### Data Sources
+
+As part of the [City of San Francisco's Open DataSF Project](https://datasf.org/opendata/), the San Francisco Police Deparment (SFPD) provides a daily feed of Police Crime Incidents to the public for accountability purposes. This data has been made available since 2018 and provides a snapshot of crimes reported and investigated by the SFPD. Incoming reports are triaged and categorized based on the incident details and resolution. As such, this is a great resource on the makeup of crime in the City, and gives us an opportunity to apply Data Science (DS) and Machine Learning (ML) to analyze trends over a significant period of time.
 
 The dataset is available as two CSV files with historical data from 2003-2018 and 2018-Present:
 
@@ -33,7 +54,7 @@ The dataset is available as two CSV files with historical data from 2003-2018 an
 * DataType: Time Series data for SFPD incidents reported by:
   * Police officers
   * Citizens using SFPD website and Twitter/X
-* Published daily and ranges from Jan 1, 2003 up to the current time
+* Published daily and ranges from Jan 1, 2003 up to the current time. Due to limited compute resources, I will focus on the incidents from 2018 till today
 * Includes categorization and sub-categorization of incidents, as well as resolution codes
 * Include GIS (LatLong) and neighborhood data that can be cross-indexed with other SF City datasets
   
@@ -49,10 +70,5 @@ What did your research find?
 
 #### Outline of project
 
-* [notebooks/ExploratoryDataAnalysis.ipynb](https://github.com/fazeelgm/UCB_ML_AI_Capstone/blob/main/notebooks/ExploratoryDataAnalysis.ipynb)
-  * Jupyter notebook containing the initial exploratory data analysis (EDA) of the dataset to develop a domain understanding
-  * Includes data retrieval and cleanup required before we can apply DS/ML techniques
-* [notebooks/ModelExploration.ipynb](https://github.com/fazeelgm/UCB_ML_AI_Capstone/blob/main/notebooks/ModelExploration.ipynb)
-  * Jupyter notebook detailing the Data Models that were explored
 
 ##### Contact and Further Information
