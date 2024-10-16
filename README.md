@@ -79,7 +79,7 @@ For this project, we will use the 2018-Present data as we are focused on the Doo
 
 ### Exploratory Data Analysis
 
-#### Inspect Features
+#### Feature Engineering
 
 Since this data is used for both incident recording as well as internal data house-keeping, during the first pass, we used the following strategy to reduce the initial set of columns:
 
@@ -102,7 +102,7 @@ Since this data is used for both incident recording as well as internal data hou
   * `supervisor_district_2012`
   * `crrent_supervisor_districts`
 
-**Temporal Features**
+#### Temporal Features
 
 Our data is indexed by DateTimeStamp, but this is not very useful to work with. We converted the time of each incidence to it's component values to facilitate analysis and for consideration by our ML models:
 
@@ -120,7 +120,7 @@ In addition, time has semantic meaning beyond it's absolute value and concepts l
 * `US Holidays`
 * `Time of Day`: Morning, Afternoon, Evening, Night
 
-**Geo-Based Features**
+#### Geo-Based Features
 
 According to [LatLong.net](https://www.latlong.net/place/san-francisco-bay-area-ca-usa-32614.html) the San Francisco County is bounded by the following rectangle:
 
@@ -133,7 +133,7 @@ According to [LatLong.net](https://www.latlong.net/place/san-francisco-bay-area-
 
 We verified that all data was within these bounds - the SFPD has actually done a good job as no exceptions were discovered.
 
-**Incidence-Specific Features: Target Variable - Category**
+#### Incident-Specific Features: Target Variable - Category
 
 We then looked at features that are important for classifying the incidents because there were mulitple rows with the same incident ID, and we found the explanation as follows (from the [DataSF Dataset Explainer](https://sfdigitalservices.gitbook.io/dataset-explainers/sfpd-incident-report-2018-to-present#multiple-incident-codes)):
 
@@ -156,7 +156,7 @@ So we removed the following columns:
 and only retained `incident_category` as our target variable:
 
 <table style="width:100%"><tr>
-  <td width="100%"><em>Figure TO_DO: Category, our target variable, has 49 possible classes</em><img src="images/categories_histogram.png" border="0"/></td>
+  <td width="100%"><em>Figure TO_DO: Category, our target variable, has 49 possible classes and is highly imbalanced</em><img src="images/categories_histogram.png" border="0"/></td>
 </tr></table>
 
 Looking at the `category` distribution, we noticed the following categories:
@@ -167,7 +167,7 @@ Looking at the `category` distribution, we noticed the following categories:
 
 This left us with 45 possible Cateogries that a crime can be classified in San Francisco, and these will be the prediction outputs of our ML models.
 
-**District-Specific Features**
+#### Police District Specific Features
 
 We also looked at Police District and Neighborhood features and cleaned them up so we could train our on these two specific dimenions. Here is a heatmap of the Crime Categories distributed across the repobsible Police Districts based on the <latitude, longituded> of the incidence location.
 
@@ -176,7 +176,6 @@ We also looked at Police District and Neighborhood features and cleaned them up 
 </tr></table>
 
 Overall, we found numerous data entry issues that were fixed or cleaned as much as possible. The remaining data is due to human error and is difficult to "fix" easily. After this cleanup, here is the final list of features that will be used to train our models:
-
 ```
 <class 'pandas.core.frame.DataFrame'>
 DatetimeIndex: 829328 entries, 2023-03-11 14:00:00 to 2023-03-21 17:42:00
@@ -206,21 +205,73 @@ dtypes: bool(1), float64(2), int64(6), object(9)
 
 ## Model Development
 
+The task of classifying the incident types based on a set of historical attrirbutes (features) and predicting on similar attributes is a **multiclass classification** problem. We will now experiment on some ML models that are generally used for similar problems to see what would be the best choice for us.
 
-#### Results
+We will evaluate the following models:
+
+* Simple classification models
+  * `DummyClassifier` to get a baseline for our project
+  * `LogisticRegression` with L1 Regularization
+* Multiclass classifiers
+  * `KNeighborsClassifier`
+* Ensemble methods: Since our dataset has high variability with a lot of numerical and cagtegorical features with a range of mean and variance, we plan to employ ensemble methods and tune them for best results
+  * `RandomForestClassifier`
+  * `XGBClassifier`: We considered `XGLite` but selected XGBoost as it provides better model explainability features like SHAP values, which we expect to be able to use in explaining our results
+
+### Evaluation Metrics
+
+In this project, we are predicting or classifying across 45 crime categories. We will use two evaluation metrics to compare our models:
+
+1. **Accuracy**: Measures the proportion of correct predictions over all predictions made. The accuracy benchmark is 1/45 or 2.22% given our crime categories is a rough benchmark that we will keep in mind. We will try to maximize our classification accuracy
+3. **Log_Loss**: Measures the accuracy of a classifier by penalizing false classifications. It does this by taking the negative logarithm of the predicted probability for the true class. The goal is to minimize this loss, meaning that higher probabilities are assigned to the correct classes. Log loss is a powerful way to evaluate not just if the model is making the right predictions, but how confident it is in those predictions. A lower log loss indicates a model that is both accurate and confident and a value of 0 would mean that all predictions were correct!
+
+While accuracy provides a simple measure of correctness, log-loss offers a more nuanced view by considering how confident those predictions are. A model that predicts with 51% confidence for the correct class will have the same accuracy as one that predicts with 99% confidence, but their log loss will be very different. The 99%-confident model will have a much lower log loss.
+
+We'll use them together for a comprehensive evaluation and to learn more about them.
+
+### Data Preparation
+
+1. Encode numeric and categorical features so they can be ingested by the models
+2. Create two datasets, training and validation, by splitting 80/20%, stratigying it on the target column
+3. Scaled the data using `StandardScaler`
+
+### Model Exploration
+
+#### Baseline Modeling
+
+Used the Scikit-Learn `DummyClassifier` method to get a baseline for our predictions - testing the different strategies that it supports. We will use the `stratified` strategy to match our evaluation Log-Loss metric that is based on probabilistic distribution of the target variable and because we have a highly imbalanced distribution
 
 <table style="width:100%"><tr>
-  <td width="100%"><em>Figure TO_DO: Results Tally</em><img src="images/table_results_tally.png" border="0"/></td>
+  <td width="100%"><em>Figure TO_DO: Baseline Model Testing</em><img src="images/table_models_defaults.png" border="0"/></td>
 </tr></table>
+
+#### Candidate Models
+
+Narrowed down the top 3 candidates for further investigation based on their Accuracy and LogLoss scores before proceed to brute-force hyperparameter tuning:
 
 <table style="width:100%"><tr>
   <td width="100%"><em>Figure TO_DO: Candidate Models for Tuning</em><img src="images/table_models_tuned.png" border="0"/></td>
 </tr></table>
+
+#### Hyperparameter Tuning
+
+We are now ready to tune models with a more comprehensive optimization of their training parameters. We looked at brute-force `GridSearchCV` and Randomized Parameter Optimization, but based on literature search, decided to use `BayesSearchCV` because it uses the results from previous optimization attempts to inform subsequent attempts. It builds a probability model of the objective function, mapping the input values to the probability of a loss. This surrogate model is easier to optimize than the actual objective function and allows `BayesSearchCV` to select the next hyperparameter combination. More time is spent in selecting the next optimization parameters than brutely trying them all out.
+
+Our model selection run will:
+
+* Use stratified 3-Fold cross validation
+* Only use 5 iterations due to the limitation of our hardware given the large dataset
+
+During the initial optimization runs, we tuned the parameters if the model didn't converge or took too long.
 
 <table style="width:100%"><tr>
   <td width="100%"><em>Figure TO_DO: Hyperparameter Tuning Results</em><img src="images/table_models_CV.png" border="0"/></td>
 </tr></table>
 
 ## Evaluation & Interpretation
+
+<table style="width:100%"><tr>
+  <td width="100%"><em>Figure TO_DO: Results Tally</em><img src="images/table_results_tally.png" border="0"/></td>
+</tr></table>
 
 ## Next steps
