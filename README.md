@@ -51,7 +51,7 @@ This work is part of my Capstone Project for the UC Berkeley Artificial Inetllig
 
 This is a very high-level synopsis of my findings, I invite you to read the rest of this Summary Report and then dive deeper into the associated notebooks - there is a lot of interesting data, especially for anyone who's walked the streets of San Francisco!
 
-## The Data - SFPD Daily Crime Incidents Reports
+# The Data - SFPD Daily Crime Incidents Reports
 
 As part of the [City of San Francisco's Open DataSF Project](https://datasf.org/opendata/), the San Francisco Police Deparment (SFPD) provides a daily feed of Police Crime Incidents to the public for accountability purposes. This data has been made available since 2003 and provides a snapshot of crimes reported and investigated by the SFPD. Incoming reports are triaged and categorized based on the incident details and resolution. As such, this is a great resource on the makeup of crime in the City, and gives us an opportunity to apply Data Science (DS) and Machine Learning (ML) to analyze trends over a significant period of time.
 
@@ -72,14 +72,14 @@ For this project, we will use the 2018-Present data as we are focused on the Doo
   * GIS (latitude, longitude) and neighborhood data that can be cross-indexed with other SF City datasets
 * Contains data for _incoming incidents_, not their final resolution, so this is not a way to gauge crime resolution, but onlhy a barometer of the overall incidence rates
   
-#### Methodology
+## Methodology
 1. Exploratory Data Analysis: we first analyze the data to understand it and prepare it for the Data Modeling phase. The work summarized here is detailed in the [`ExploratoryDataAnalysis.ipynb`](https://github.com/fazeelgm/UCB_ML_AI_Capstone/blob/main/notebooks/ExploratoryDataAnalysis.ipynb) Jupyter notebook
 2. Model Exploration: We start with a few ML models suitable for multi-class classification problems, identify good candidates for optimization and evaluate them on our evaluation criteria - details in the [`ModelExploration.ipynb`](https://github.com/fazeelgm/UCB_ML_AI_Capstone/blob/main/notebooks/ModelExploration.ipynb) notebook
 3. Interpretation of Best Model: Finally we apply learnings from the trained model to our Doom Loop scenario - see [`ModelVisualizations.ipynb`](https://github.com/fazeelgm/UCB_ML_AI_Capstone/blob/main/notebooks/ModelVisualizations.ipynb)
 
-### Exploratory Data Analysis
+## Exploratory Data Analysis
 
-#### Feature Engineering
+### Feature Engineering
 
 Since this data is used for both incident recording as well as internal data house-keeping, during the first pass, we used the following strategy to reduce the initial set of columns:
 
@@ -102,7 +102,7 @@ Since this data is used for both incident recording as well as internal data hou
   * `supervisor_district_2012`
   * `crrent_supervisor_districts`
 
-#### Temporal Features
+### Temporal Features
 
 Our data is indexed by DateTimeStamp, but this is not very useful to work with. We converted the time of each incidence to it's component values to facilitate analysis and for consideration by our ML models:
 
@@ -120,7 +120,7 @@ In addition, time has semantic meaning beyond it's absolute value and concepts l
 * `US Holidays`
 * `Time of Day`: Morning, Afternoon, Evening, Night
 
-#### Geo-Based Features
+### Geo-Based Features
 
 According to [LatLong.net](https://www.latlong.net/place/san-francisco-bay-area-ca-usa-32614.html) the San Francisco County is bounded by the following rectangle:
 
@@ -133,7 +133,7 @@ According to [LatLong.net](https://www.latlong.net/place/san-francisco-bay-area-
 
 We verified that all data was within these bounds - the SFPD has actually done a good job as no exceptions were discovered.
 
-#### Incident-Specific Features: Target Variable - Category
+### Incident-Specific Features: Target Variable - Category
 
 We then looked at features that are important for classifying the incidents because there were mulitple rows with the same incident ID, and we found the explanation as follows (from the [DataSF Dataset Explainer](https://sfdigitalservices.gitbook.io/dataset-explainers/sfpd-incident-report-2018-to-present#multiple-incident-codes)):
 
@@ -167,7 +167,7 @@ Looking at the `category` distribution, we noticed the following categories:
 
 This left us with 45 possible Cateogries that a crime can be classified in San Francisco, and these will be the prediction outputs of our ML models.
 
-#### Police District Specific Features
+### Police District Specific Features
 
 We also looked at Police District and Neighborhood features and cleaned them up so we could train our on these two specific dimenions. Here is a heatmap of the Crime Categories distributed across the repobsible Police Districts based on the <latitude, longituded> of the incidence location.
 
@@ -218,7 +218,7 @@ We will evaluate the following models:
   * `RandomForestClassifier`
   * `XGBClassifier`: We considered `XGLite` but selected XGBoost as it provides better model explainability features like SHAP values, which we expect to be able to use in explaining our results
 
-### Evaluation Metrics
+## Evaluation Metrics
 
 In this project, we are predicting or classifying across 45 crime categories. We will use two evaluation metrics to compare our models:
 
@@ -229,15 +229,15 @@ While accuracy provides a simple measure of correctness, log-loss offers a more 
 
 We'll use them together for a comprehensive evaluation and to learn more about them.
 
-### Data Preparation
+## Data Preparation
 
 1. Encode numeric and categorical features so they can be ingested by the models
 2. Create two datasets, training and validation, by splitting 80/20%, stratigying it on the target column
 3. Scaled the data using `StandardScaler`
 
-### Model Exploration
+## Model Exploration
 
-#### Baseline Modeling
+### Baseline Modeling
 
 Used the Scikit-Learn `DummyClassifier` method to get a baseline for our predictions - testing the different strategies that it supports. We will use the `stratified` strategy to match our evaluation Log-Loss metric that is based on probabilistic distribution of the target variable and because we have a highly imbalanced distribution
 
@@ -245,7 +245,7 @@ Used the Scikit-Learn `DummyClassifier` method to get a baseline for our predict
   <td width="100%"><em>Figure TO_DO: Baseline Model Testing</em><img src="images/table_models_defaults.png" border="0"/></td>
 </tr></table>
 
-#### Candidate Models
+### Candidate Models
 
 Narrowed down the top 3 candidates for further investigation based on their Accuracy and LogLoss scores before proceed to brute-force hyperparameter tuning:
 
@@ -253,7 +253,7 @@ Narrowed down the top 3 candidates for further investigation based on their Accu
   <td width="100%"><em>Figure TO_DO: Candidate Models for Tuning</em><img src="images/table_models_tuned.png" border="0"/></td>
 </tr></table>
 
-#### Hyperparameter Tuning
+### Hyperparameter Tuning
 
 We are now ready to tune models with a more comprehensive optimization of their training parameters. We looked at brute-force `GridSearchCV` and Randomized Parameter Optimization, but based on literature search, decided to use `BayesSearchCV` because it uses the results from previous optimization attempts to inform subsequent attempts. It builds a probability model of the objective function, mapping the input values to the probability of a loss. This surrogate model is easier to optimize than the actual objective function and allows `BayesSearchCV` to select the next hyperparameter combination. More time is spent in selecting the next optimization parameters than brutely trying them all out.
 
@@ -268,7 +268,7 @@ During the initial optimization runs, we tuned the parameters if the model didn'
   <td width="100%"><em>Figure TO_DO: Hyperparameter Tuning Results</em><img src="images/table_models_CV.png" border="0"/></td>
 </tr></table>
 
-### Model Evaluation & Interpretation
+## Model Evaluation & Interpretation
 
 <table style="width:100%"><tr>
   <td width="100%"><em>Figure TO_DO: Results Tally</em><img src="images/table_results_tally.png" border="0"/></td>
@@ -304,7 +304,7 @@ Even though our overall classification rate may be low, our tuned model improved
   <td width="33%"><img src="images/xgbtree.png" border="0"/></td>
 </tr></table>
 
-#### Model Explanation
+## Model Explanation
 
 To look at our model from an exlainability angle, we used the SHAP (SHapley Additive exPlanations) Python package. SHAP can be used to explain the prediction of a single sample by computing the contribution of each feature to the prediction. Let us do this now on our validation set.
 
@@ -332,7 +332,7 @@ We can also look at all the auto theft samples together to see how this class is
 </tr></table>
 
 
-### Deployment & Implementation
+## Deployment & Implementation
 
 We prepared the tuned models for production deployment as follows:
 
@@ -343,4 +343,21 @@ We prepared the tuned models for production deployment as follows:
 
 This allows us to preserve the hard-to-train models and make the deployment process scalable for production environments.
 
-## Doom Loop: Trends & Scenarios
+# Doom Loop: Trends & Scenarios
+<table style="width:100%"><em>Figure TO_DO: Police Districts at-a-glance</em>
+<tr>
+  <td width="50%"><img src="images/sf_incidents_by_PD_map.png" border="0"/></td>
+  <td width="50%"><img src="images/incidents_by_pd.png" border="0"/></td>
+</tr></table>
+
+<table style="width:100%"><tr>
+  <td width="100%"><em>Figure TO_DO: Top Categories by Police District by Year</em>
+    <img src="images/incidents_by_pd_year.png" border="0"/></td>
+</tr></table>
+
+
+<table style="width:100%"><tr>
+  <td width="100%"><em>Figure TO_DO: Top Police District by Categories by Year</em>
+    <img src="images/incidents_by_pd_by_category_year.png" border="0"/></td>
+</tr></table>
+
