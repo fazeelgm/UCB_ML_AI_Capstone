@@ -351,6 +351,11 @@ This allows us to preserve the hard-to-train models and make the deployment proc
 </tr></table>
 
 <table style="width:100%"><tr>
+  <td width="100%"><em>Figure TO_DO: SF Crime Categories By Location</em>
+    <img src="images/sf_top_categorie_by_location_map.png" border="0"/></td>
+</tr></table>
+
+<table style="width:100%"><tr>
   <td width="100%"><em>Figure TO_DO: Top Categories by Police District by Year</em>
     <img src="images/incidents_by_pd_year.png" border="0"/></td>
 </tr></table>
