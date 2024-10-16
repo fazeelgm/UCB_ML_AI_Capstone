@@ -64,7 +64,18 @@ The dataset is available as two CSV files with historical data from 2003-2018 an
 3. Discussion of Best Model
 
 #### Results
-What did your research find?
+
+<table style="width:100%"><tr>
+  <td width="100%"><em>Figure TO_DO: Results Tally</em><img src="images/table_results_tally.png" border="0"/></td>
+</tr></table>
+
+<table style="width:100%"><tr>
+  <td width="100%"><em>Figure TO_DO: Candidate Models for Tuning</em><img src="images/table_models_tuned.png" border="0"/></td>
+</tr></table>
+
+<table style="width:100%"><tr>
+  <td width="100%"><em>Figure TO_DO: Hyperparameter Tuning Results</em><img src="images/table_models_CV.png" border="0"/></td>
+</tr></table>
 
 #### Next steps
 
