@@ -308,11 +308,29 @@ Even though our overall classification rate may be low, our tuned model improved
 
 To look at our model from an exlainability angle, we used the SHAP (SHapley Additive exPlanations) Python package. SHAP can be used to explain the prediction of a single sample by computing the contribution of each feature to the prediction. Let us do this now on our validation set.
 
-<table style="width:100%"><tr>
-  <td width="100%"><em>Figure TO_DO: Using SHAP module to explain the reasoning behind the prediction of a Larceny Theft incident</em><img src="images/shap_larceny_example.png" border="0"/></td>
+Let's consider 2 samples of auto theft (category 22) in our dataset:
+
+<table style="width:100%"><em>Figure TO_DO: SHAP Auto Theft Incidents at noon- vs night-time</em>
+<tr>
+  <td width="100%"><img src="images/shap_auto_s1.png" border="0"/></td>
+</tr><tr>
+  <td width="100%"><img src="images/shap_auto_s2.png" border="0"/></td>
 </tr></table>
 
-In the above case, we can see the `base value` showing the approximate location of the average predicted values across the training set. The bolded value is the model prediction for this sample. The red bars represent the features that have conributed positively to the prediction's deviation from the base value, and the length of the bar indicates the features contribution. The blue bar represents negative contribution. We can see how our model is using time and location components in making the prediction for the first sample.
+In the SHAP explanation `force_plot` the `base value` shows the approximate location of the average predicted values across the training set. The bolded value is the model probability for this sample being assigned the class `Motor Vehicle Theft` due to the feature values - hence similar samples will also be classified similarly. The red bars represent the features that have conributed positively to the prediction's deviation from the base value, and the length of the bar indicates the features contribution. The blue bar represents negative contribution. 
+
+In the first case, we can see how our model gives an 86% probability of an auto theft, using time and location components in making it's prediction and around noon-time, the time component is weighed heavily in the classification.
+
+For the second incidence late night, we see a lower probability (9%) of the car being stolen, but the model adds the neighborhood location as a greater component in it's decision making
+
+This shows us that the model is learning effectively and intuitively!
+
+We can also look at all the auto theft samples together to see how this class is being labeled by the model and use this for addressing auto thefts for specific scenarios.
+
+<table style="width:100%"><tr>
+  <td width="100%"><em>Figure TO_DO: Results Tally</em><img src="images/shap_auto_oct_24.png" border="0"/></td>
+</tr></table>
+
 
 ## Deployment & Implementation
 
