@@ -360,9 +360,13 @@ This allows us to preserve the hard-to-train models and make the deployment proc
     <img src="images/incidents_by_pd_year.png" border="0"/></td>
 </tr></table>
 
-
 <table style="width:100%"><tr>
   <td width="100%"><em>Figure TO_DO: Top Police District by Categories by Year</em>
     <img src="images/incidents_by_pd_by_category_year.png" border="0"/></td>
 </tr></table>
 
+
+<table style="width:100%"><tr>
+  <td width="100%"><em>Figure TO_DO: Incident Resolution by Police District by Year</em>
+    <img src="images/incidents_resolutions_by_pd_by_year.png" border="0"/></td>
+</tr></table>
