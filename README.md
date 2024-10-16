@@ -268,10 +268,61 @@ During the initial optimization runs, we tuned the parameters if the model didn'
   <td width="100%"><em>Figure TO_DO: Hyperparameter Tuning Results</em><img src="images/table_models_CV.png" border="0"/></td>
 </tr></table>
 
-## Evaluation & Interpretation
+## Model Evaluation & Interpretation
 
 <table style="width:100%"><tr>
   <td width="100%"><em>Figure TO_DO: Results Tally</em><img src="images/table_results_tally.png" border="0"/></td>
 </tr></table>
+
+Evaluating the final tuned model scores, we see that:
+
+* We see that `XGBClassifier` consistently did better in both our evaluation metrics
+* However, `RandomForestClassifier` improved the most from it's own baseline score
+* The final tuned model scored 2.3240 log-loss, improving 92.72% from the `DummyClassifier` baseline score and 35.01% Accuracy on the Test dataset
+* Given the exceptionally long training time required for `XGBClassifier` (over 4 hours) relative to `RandomForestClassifier` (about 17 minutes), the difference in log-loss is negligible and it may be an acceptabel model for our classification problem
+* We expected the overall scores to be low due to the quality of the data and the imbalanced target distribution, so the results are considered acceptable
+
+We also used other tools below to evaluate our best model:
+
+* Classification Report
+* Confusion Matrix
+* Feature Importance
+* Decision Tree
+
+We can make the following observations:
+
+1. The accuracy report shows that for our top category, `Larceny Theft`, the F-1 score is highest at 56% suggesting that our model does well when there is ample data and is working intuitively
+2. Looking at the feature importance graph, we see all the syntheitc features, like holidays and time of day `tod`, that we added during the feature engineering phase are being used in the prediction process!
+3. The XGB decision tree shows the shallow depth reflects our feature importance distribution and shows that the model is well-trained
+4. The Confusion shows the reason for our low accuracy scores is due to the imbalanced classes and that there may not be sufficient data for them
+
+Even though our overall classification rate may be low, our tuned model improved by 92.72% over the baseline benchmark. For a large dataset with noisy labels, we were able to achieve an accuracy of 35.01% for a 45-class classification problem using only 14 input features. Seeing the fact that the accuracy benchmark for uniform blind guess is 2.22% (1 out of 45 possible classes), this is a reasonably good result - but we have to say that this is a hard problem to solve without enriching our dataset.
+
+<table style="width:100%"><tr><em>Figure TO_DO: Feature importance, confusion matrix and decision tree (Click on image to see details)</em>
+  <td width="33%"><img src="images/best_feature_importances.png" border="0"/></td>
+  <td width="33%"><img src="images/Confusion_matrix_XGBClassifier.png" border="0"/></td>
+  <td width="33%"><img src="images/xgbtree.png" border="0"/></td>
+</tr></table>
+
+### Model Explanation
+
+To look at our model from an exlainability angle, we used the SHAP (SHapley Additive exPlanations) Python package. SHAP can be used to explain the prediction of a single sample by computing the contribution of each feature to the prediction. Let us do this now on our validation set.
+
+<table style="width:100%"><tr>
+  <td width="100%"><em>Figure TO_DO: Using SHAP module to explain the reasoning behind the prediction of a Larceny Theft incident</em><img src="images/shap_larceny_example.png" border="0"/></td>
+</tr></table>
+
+In the above case, we can see the `base value` showing the approximate location of the average predicted values across the training set. The bolded value is the model prediction for this sample. The red bars represent the features that have conributed positively to the prediction's deviation from the base value, and the length of the bar indicates the features contribution. The blue bar represents negative contribution. We can see how our model is using time and location components in making the prediction for the first sample.
+
+## Deployment & Implementation
+
+We prepared the tuned models for production deployment as follows:
+
+1. Use `joblib.dump()` function to serialize the fitted models to disk
+1. These can then be deloyed to the production environment
+1. Use `joblib.load()` function to read the saved model into our notebook
+1. Tested by invoking the `predict()` method on a few test samples
+
+This allows us to preserve the hard-to-train models and make the deployment process scalable for production environments.
 
 ## Next steps
