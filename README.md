@@ -203,7 +203,7 @@ Data columns (total 18 columns):
 dtypes: bool(1), float64(2), int64(6), object(9)
 ```
 
-## Model Development
+# Model Development
 
 The task of classifying the incident types based on a set of historical attrirbutes (features) and predicting on similar attributes is a **multiclass classification** problem. We will now experiment on some ML models that are generally used for similar problems to see what would be the best choice for us.
 
@@ -268,7 +268,7 @@ During the initial optimization runs, we tuned the parameters if the model didn'
   <td width="100%"><em>Figure TO_DO: Hyperparameter Tuning Results</em><img src="images/table_models_CV.png" border="0"/></td>
 </tr></table>
 
-## Model Evaluation & Interpretation
+### Model Evaluation & Interpretation
 
 <table style="width:100%"><tr>
   <td width="100%"><em>Figure TO_DO: Results Tally</em><img src="images/table_results_tally.png" border="0"/></td>
@@ -304,7 +304,7 @@ Even though our overall classification rate may be low, our tuned model improved
   <td width="33%"><img src="images/xgbtree.png" border="0"/></td>
 </tr></table>
 
-### Model Explanation
+#### Model Explanation
 
 To look at our model from an exlainability angle, we used the SHAP (SHapley Additive exPlanations) Python package. SHAP can be used to explain the prediction of a single sample by computing the contribution of each feature to the prediction. Let us do this now on our validation set.
 
@@ -332,7 +332,7 @@ We can also look at all the auto theft samples together to see how this class is
 </tr></table>
 
 
-## Deployment & Implementation
+### Deployment & Implementation
 
 We prepared the tuned models for production deployment as follows:
 
@@ -343,4 +343,4 @@ We prepared the tuned models for production deployment as follows:
 
 This allows us to preserve the hard-to-train models and make the deployment process scalable for production environments.
 
-## Next steps
+## Doom Loop: Trends & Scenarios
