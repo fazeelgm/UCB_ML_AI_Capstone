@@ -50,14 +50,14 @@ For a large dataset with noisy labels, we were able to achieve an accuracy of 35
 
 In addition to the crime classification capabilities of the model, the model also provides explanations on how it makes its decisions. This information can be really useful for improving the Polices' ability to identify locations and times for specific crime patterns, as well as learn from historical data to target crime hoptspots. Here are two example of actual Auto Theft incidents from our dataset, one in the morning and one at night that the model identified correctly, alongwith the weighting of the input features that were used for its predictions. In the first case, we see how the model gives an 89% probability of an auto theft, using time and location components in making it's prediction - around noon-time, the temporal component is weighed heavily in the classification (red bars bumping the confidence higher). 
 
-<table style="width:100%"><em>Figure TO_DO: SHAP Auto Theft Incidents at noon- vs night-time</em>
+<table style="width:100%"><em>Figure 2: SHAP Auto Theft Incidents at noon- vs night-time</em>
 <tr>
   <td width="100%"><img src="images/shap_auto_s1.png" border="0"/></td>
 </tr></table>
 
 For the second incidence late at night, we see a lower probability (9%) of the car being stolen, but the model weighs the neighborhood location as a greater component in it's decision making, reducing it's overall confidence level (blue bars).
 
-<table style="width:100%"><em>Figure TO_DO: SHAP Auto Theft Incidents at noon- vs night-time</em>
+<table style="width:100%"><em>Figure 3: SHAP Auto Theft Incidents at noon- vs night-time</em>
 <tr>
   <td width="100%"><img src="images/shap_auto_s2.png" border="0"/></td>
 </tr></table>
@@ -68,7 +68,7 @@ This shows us that the model is learning effectively and intuitively!
 
 We next looked at the daily rates of crime incidents to see if there were more crimes occuring around Covid - if anything, we found that the rate has actually slowed down! Looking at the trend line across all incidents in the left graph, it's difficult to tell if that is really the case, but when we break it down by quarter to adjust for partial 2024 returns, we see that overall crime rates have come down in 2024 to the 2020 Covid levels and are lower than the pre-Covid period of 2018-2019. This is good news! 
 
-<table style="width:100%"><tr><em>Figure TO_DO: Feature importance, confusion matrix and decision tree (Click on image to see details)</em>
+<table style="width:100%"><tr><em>Figure 4: Feature importance, confusion matrix and decision tree (Click on image to see details)</em>
   <td width="50%"><img src="images/incidents_per_day.png" border="0"/></td>
   <td width="50%"><img src="images/incidents_by_quarter.png" border="0"/></td>
 </tr></table>
@@ -78,7 +78,7 @@ We next looked at the daily rates of crime incidents to see if there were more c
 Digging deeper, we looked at crime across different categories, locations and police disctricts and realized that it's possible to slice and dice the information to suit many narratives. You can go thru the [detailed analysis below](https://github.com/fazeelgm/UCB_ML_AI_Capstone/blob/main/README.md#doom-loop-ground-reality) - but the gist of what I found can be seen in this graphic showing the SFPD's crime resolution rate for the top-10 crime categories by precinct - responsiveness likely creates a positive outlook while cases backing up frustrates public pereception as well as reporting of crimes, aka Doom Loop! You can see that during Covid, case resolution lagged across all categories, but has been picking up since then. So staffing could be important but we cannot deduce that from this data. Looking specifically at the Tenderloin district, a historically troubled area, we can see the extra attention being paid this year - perhaps due to all the attention from a tough mayoral race!
 
 <table style="width:100%"><tr>
-  <td width="100%"><em>Figure TO_DO: Incident Resolution by Police District by Year</em>
+  <td width="100%"><em>Figure 5: Incident Resolution by Police District by Year</em>
     <img src="images/incidents_resolutions_by_pd_by_year.png" border="0"/></td>
 </tr></table>
 
@@ -189,7 +189,7 @@ So we removed the following columns:
 and only retained `incident_category` as our target variable:
 
 <table style="width:100%"><tr>
-  <td width="100%"><em>Figure TO_DO: Category, our target variable, has 49 possible classes and is highly imbalanced</em><img src="images/categories_histogram.png" border="0"/></td>
+  <td width="100%"><em>Figure 6: Category, our target variable, has 49 possible classes and is highly imbalanced</em><img src="images/categories_histogram.png" border="0"/></td>
 </tr></table>
 
 Looking at the `category` distribution, we noticed the following categories:
@@ -205,7 +205,7 @@ This left us with 45 possible Cateogries that a crime can be classified in San F
 We also looked at Police District and Neighborhood features and cleaned them up so we could train our on these two specific dimenions. Here is a heatmap of the Crime Categories distributed across the repobsible Police Districts based on the <latitude, longituded> of the incidence location.
 
 <table style="width:100%"><tr>
-  <td width="100%"><em>Figure TO_DO: Police District Heatmap of all Incidents</em><img src="images/incidents_per_district_heatmap.png" border="0"/></td>
+  <td width="100%"><em>Figure 7: Police District Heatmap of all Incidents</em><img src="images/incidents_per_district_heatmap.png" border="0"/></td>
 </tr></table>
 
 Overall, we found numerous data entry issues that were fixed or cleaned as much as possible. The remaining data is due to human error and is difficult to "fix" easily. After this cleanup, here is the final list of features that will be used to train our models:
@@ -275,7 +275,7 @@ We'll use them together for a comprehensive evaluation and to learn more about t
 Used the Scikit-Learn `DummyClassifier` method to get a baseline for our predictions - testing the different strategies that it supports. We will use the `stratified` strategy to match our evaluation Log-Loss metric that is based on probabilistic distribution of the target variable and because we have a highly imbalanced distribution
 
 <table style="width:100%"><tr>
-  <td width="100%"><em>Figure TO_DO: Baseline Model Testing</em><img src="images/table_models_defaults.png" border="0"/></td>
+  <td width="100%"><em>Figure 8: Baseline Model Testing</em><img src="images/table_models_defaults.png" border="0"/></td>
 </tr></table>
 
 ### Candidate Models
@@ -283,7 +283,7 @@ Used the Scikit-Learn `DummyClassifier` method to get a baseline for our predict
 Narrowed down the top 3 candidates for further investigation based on their Accuracy and LogLoss scores before proceed to brute-force hyperparameter tuning:
 
 <table style="width:100%"><tr>
-  <td width="100%"><em>Figure TO_DO: Candidate Models for Tuning</em><img src="images/table_models_tuned.png" border="0"/></td>
+  <td width="100%"><em>Figure 9: Candidate Models for Tuning</em><img src="images/table_models_tuned.png" border="0"/></td>
 </tr></table>
 
 ### Hyperparameter Tuning
@@ -298,13 +298,13 @@ Our model selection run will:
 During the initial optimization runs, we tuned the parameters if the model didn't converge or took too long.
 
 <table style="width:100%"><tr>
-  <td width="100%"><em>Figure TO_DO: Hyperparameter Tuning Results</em><img src="images/table_models_CV.png" border="0"/></td>
+  <td width="100%"><em>Figure 10: Hyperparameter Tuning Results</em><img src="images/table_models_CV.png" border="0"/></td>
 </tr></table>
 
 ## Model Evaluation & Interpretation
 
 <table style="width:100%"><tr>
-  <td width="100%"><em>Figure TO_DO: Results Tally</em><img src="images/table_results_tally.png" border="0"/></td>
+  <td width="100%"><em>Figure 11: Results Tally</em><img src="images/table_results_tally.png" border="0"/></td>
 </tr></table>
 
 Evaluating the final tuned model scores, we see that:
@@ -331,7 +331,7 @@ We can make the following observations:
 
 Even though our overall classification rate may be low, our tuned model improved by 92.72% over the baseline benchmark. For a large dataset with noisy labels, we were able to achieve an accuracy of 35.01% for a 45-class classification problem using only 14 input features. Seeing the fact that the accuracy benchmark for uniform blind guess is 2.22% (1 out of 45 possible classes), this is a reasonably good result - but we have to say that this is a hard problem to solve without enriching our dataset.
 
-<table style="width:100%"><tr><em>Figure TO_DO: Feature importance, confusion matrix and decision tree (Click on image to see details)</em>
+<table style="width:100%"><tr><em>Figure 12: Feature importance, confusion matrix and decision tree (Click on image to see details)</em>
   <td width="33%"><img src="images/best_feature_importances.png" border="0"/></td>
   <td width="33%"><img src="images/Confusion_matrix_XGBClassifier.png" border="0"/></td>
   <td width="33%"><img src="images/xgbtree.png" border="0"/></td>
@@ -343,7 +343,7 @@ To look at our model from an exlainability angle, we used the SHAP (SHapley Addi
 
 Let's consider 2 samples of auto theft (category 22) in our dataset:
 
-<table style="width:100%"><em>Figure TO_DO: SHAP Auto Theft Incidents at noon- vs night-time</em>
+<table style="width:100%"><em>Figure 13: SHAP Auto Theft Incidents at noon- vs night-time</em>
 <tr>
   <td width="100%"><img src="images/shap_auto_s1.png" border="0"/></td>
 </tr><tr>
@@ -361,7 +361,7 @@ This shows us that the model is learning effectively and intuitively!
 We can also look at all the auto theft samples together to see how this class is being labeled by the model and use this for addressing auto thefts for specific scenarios.
 
 <table style="width:100%"><tr>
-  <td width="100%"><em>Figure TO_DO: Results Tally</em><img src="images/shap_auto_oct_24.png" border="0"/></td>
+  <td width="100%"><em>Figure 14: Results Tally</em><img src="images/shap_auto_oct_24.png" border="0"/></td>
 </tr></table>
 
 
@@ -380,7 +380,7 @@ This allows us to preserve the hard-to-train models and make the deployment proc
 
 We start exploring the Doom Loop story line by building our own narrative that is based on the facts coming from our dataset. First, we look at the crime distribution across the San Francisco by Police Districts. Here you see a map view and a breakdown of the top-10 crime categories across each police district. This gives us an idea of where to focus for the largest swath of crimes:
 
-<table style="width:100%"><em>Figure TO_DO: Police Districts at-a-glance</em>
+<table style="width:100%"><em>Figure 15: Police Districts at-a-glance</em>
 <tr>
   <td width="50%"><img src="images/sf_incidents_by_PD_map.png" border="0"/></td>
   <td width="50%"><img src="images/incidents_by_pd.png" border="0"/></td>
@@ -389,21 +389,21 @@ We start exploring the Doom Loop story line by building our own narrative that i
 Next we show the Top-5 crime category locations across our time span to get a sense of the richness of the datset from a dashboarding perspective - you can see the concentration in the north-east corner of the city. This is where we find the busiest precincts.
 
 <table style="width:100%"><tr>
-  <td width="100%"><em>Figure TO_DO: SF Crime Categories By Location</em>
+  <td width="100%"><em>Figure 16: SF Crime Categories By Location</em>
     <img src="images/sf_top_categorie_by_location_map.png" border="0"/></td>
 </tr></table>
 
 We now start to dig deeper into the Doom Loop Hypothesis to see how the incidence of the Top-5 crime categories is changing over the time period. We see that in most cases, the crime incidence dipping during Covid and 2024, and the overall trend is down. So far, so good!
 
 <table style="width:100%"><tr>
-  <td width="100%"><em>Figure TO_DO: Top Categories by Police District by Year</em>
+  <td width="100%"><em>Figure 17: Top Categories by Police District by Year</em>
     <img src="images/incidents_by_pd_year.png" border="0"/></td>
 </tr></table>
 
 Next, we llok at the workload of the 10 police districts across the top-10 crime categories, and we see it follow the same pattern - dip during Covid and down in 2024. The overall workload of the busiest precincts is considerably higher than the western, lower population districts.
 
 <table style="width:100%"><tr>
-  <td width="100%"><em>Figure TO_DO: Top Police District by Categories by Year</em>
+  <td width="100%"><em>Figure 18: Top Police District by Categories by Year</em>
     <img src="images/incidents_by_pd_by_category_year.png" border="0"/></td>
 </tr></table>
 
@@ -416,7 +416,7 @@ In this final view of incident resolutions by precinct, we find something intere
   * This could be due to the attention to the current drug and homelessness issues or the close mayoral race this year
 
 <table style="width:100%"><tr>
-  <td width="100%"><em>Figure TO_DO: Incident Resolution by Police District by Year</em>
+  <td width="100%"><em>Figure 19: Incident Resolution by Police District by Year</em>
     <img src="images/incidents_resolutions_by_pd_by_year.png" border="0"/></td>
 </tr></table>
 
