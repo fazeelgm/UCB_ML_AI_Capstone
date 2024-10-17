@@ -380,7 +380,7 @@ We prepared the tuned models for production deployment as follows:
 
 This allows us to preserve the hard-to-train models and make the deployment process scalable for production environments.
 
-# Doom Loop: Ground Reailty
+# Doom Loop? Ground Reality
 <table style="width:100%"><em>Figure TO_DO: Police Districts at-a-glance</em>
 <tr>
   <td width="50%"><img src="images/sf_incidents_by_PD_map.png" border="0"/></td>
