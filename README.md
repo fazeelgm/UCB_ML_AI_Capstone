@@ -27,7 +27,7 @@ Fazeel Mufti
 
 ## Executive summary
 
-I am interested in forecasting and classification problems and use of data for finding solutions to social issues. As a San Francisco resident, I have looked skeptically at constant reporting about the **_San Francisco Doom Loop_** - that the city's downtown area is in a downward spiral due to a combination of pandemic-related effects, declining foot traffic, rising homelessness, drug use, and businesses closing. The term gained traction as offices remained empty following COVID-19, which reduced the city's tax revenues, led to closures of key stores, and increased concerns about safety.
+I am interested in forecasting and classification problems and use of data for finding solutions to social issues. As a San Francisco resident, I was skeptical of the constant reporting about the **_San Francisco Doom Loop_** - that the city's downtown area is in a downward spiral due to a combination of pandemic-related effects, declining foot traffic, rising homelessness, drug use, and businesses closing. The term gained traction as offices remained empty following COVID-19, which reduced the city's tax revenues, led to closures of key stores, and increased concerns about safety.
 
 I came across this daily feed from the SF Police Dept. (SFPD) from January 2018 thru the present and wanted to use this data of triaged crime incidents as a way to test the **_San Francisco Doom Loop hypothesis_**. My goals are to:
 
@@ -38,26 +38,25 @@ This work is part of my Capstone Project for the UC Berkeley Artificial Inetllig
 
 ### TL;DR
 
-You can read further in much detail, but in summary, the dataset contains almost a million crime incident reports since 2018 that are recorded when police officers arrive at the scene of the crime. Each row contains location and time information along with a crime classification assigned to the case - this makes it a good barometer of crime as it happens, but we cannot deduce quality of crime resolution from this data. Figure 1 shows each crime incident super-imposed on top of San Francisco - _doom loop_ indeed!
+The dataset contains almost a million crime incident reports since 2018 that are recorded when police officers arrive at the scene of the crime and traige the situation. Each row contains location and time information along with a crime classification assigned to the case - this makes it a good barometer of crime as it happens, but we cannot deduce the quality of crime resolution from this data as that happens after the fact. Figure 1 shows each crime incident super-imposed on top of San Francisco map - _doom loop_ indeed!
 
-Our task was to use this data to train different ML models on this data and then classify a set of incidents that the model had not seen and judge it on its prediction abilities. In the process, we wanted to get to the bottom of the Doom Loop charge - here's what we learnt!
+Our task was to use this data to train different ML models on this data and then train them on a subset of the incidents and then judge them on their prediction abilities on the remainder of the incidents that the model had not seen. In the process, we wanted to get to the bottom of the Doom Loop charge - here's what we learnt!
 
 >This is a hard problem!
 
-After cleaning the data we were able to reduce it to 14 features that could then be used to classify each incident on a possible 45 crime categories. We identified and trained a set of ML Models that are suitable for multi-class classification problems of this type. After many optimization and tuning iterations, the winning `XGBClassifier` model achieved an Accuracy score of 35% (higher is better) with a LogLoss score of 2.3240 (lower is better, 0 being a perfect score) and were able improve our results by 206% (Accuracy) and 92.72% (LogLoss) over our baseline baseline. A single tuning run of the final model took over 4 hours to train on our hardware!
+After cleaning the data, we identified and trained a set of ML Models that are suitable for multi-class classification problems of this type. After many optimization and tuning iterations, the winning `XGBClassifier` model achieved an Accuracy score of 35% (higher is better) with a LogLoss score of 2.3240 (lower is better, 0 being a perfect score) and were able improve our results by 206% (Accuracy) and 92.72% (LogLoss) over our baseline benchmark. A single tuning run of the final model took over 4 hours to train on our hardware!
 
 For a large dataset with noisy labels, we were able to achieve an accuracy of 35.01% for a 45-class classification problem using only 14 input features. Seeing the fact that the accuracy benchmark for uniform blind guess is 2.22% (1 out of 45 possible classes), this is a reasonably good result - but we have to admit that this is a hard problem to solve without enriching our dataset.
 
-In addition to the crime classification capabilities of the model, it also provides explanations on how it makes its decisions, and this information can be used to improve the Police ability to identify locations and times for specific crime patterns, as well as determine learn from historical data on targeting hoptspots. Here are two example of Auto Theft incidents, one in the morning and one at night that the model identified correctly with the weighting of the input features that were used for the prediction. In the first case, we see how the model gives an 86% probability of an auto theft, using time and location components in making it's prediction and around noon-time, the temporal component is weighed heavily in the classification (red bars bumping the confidence higher). 
+In addition to the crime classification capabilities of the model, the model also provides explanations on how it makes its decisions. This information can be really useful for improving the Polices' ability to identify locations and times for specific crime patterns, as well as learn from historical data to target crime hoptspots. Here are two example of actual Auto Theft incidents from our dataset, one in the morning and one at night that the model identified correctly, alongwith the weighting of the input features that were used for its predictions. In the first case, we see how the model gives an 89% probability of an auto theft, using time and location components in making it's prediction - around noon-time, the temporal component is weighed heavily in the classification (red bars bumping the confidence higher). 
 
 <table style="width:100%"><em>Figure TO_DO: SHAP Auto Theft Incidents at noon- vs night-time</em>
 <tr>
   <td width="100%"><img src="images/shap_auto_s1.png" border="0"/></td>
 </tr></table>
 
-For the second incidence late night, we see a lower probability (9%) of the car being stolen, but the model weighs the neighborhood location as a greater component in it's decision making, reducing it's overall confidence level (blue bars).
+For the second incidence late at night, we see a lower probability (9%) of the car being stolen, but the model weighs the neighborhood location as a greater component in it's decision making, reducing it's overall confidence level (blue bars).
 
-This shows us that the model is learning effectively and intuitively!
 <table style="width:100%"><em>Figure TO_DO: SHAP Auto Theft Incidents at noon- vs night-time</em>
 <tr>
   <td width="100%"><img src="images/shap_auto_s2.png" border="0"/></td>
@@ -67,7 +66,7 @@ This shows us that the model is learning effectively and intuitively!
 
 >The more things change, the more they remain the same!
 
-We next looked at the daily rates of crime incidents to see if there were more crimes occuring around Covid - if anything, we foudn that the rate has actually slowed down! Looking at the trend line across all incidents in the left graph, it's difficult to tell if that is really the case, but when break it down by quarter to adjust for partial 2024 returns, we see that overall crime rates have come down in 20224 to the 2020 Covid levels and are lower than pre-Covid period of 2018-2019. This is good news! 
+We next looked at the daily rates of crime incidents to see if there were more crimes occuring around Covid - if anything, we found that the rate has actually slowed down! Looking at the trend line across all incidents in the left graph, it's difficult to tell if that is really the case, but when we break it down by quarter to adjust for partial 2024 returns, we see that overall crime rates have come down in 2024 to the 2020 Covid levels and are lower than the pre-Covid period of 2018-2019. This is good news! 
 
 <table style="width:100%"><tr><em>Figure TO_DO: Feature importance, confusion matrix and decision tree (Click on image to see details)</em>
   <td width="50%"><img src="images/incidents_per_day.png" border="0"/></td>
@@ -76,14 +75,14 @@ We next looked at the daily rates of crime incidents to see if there were more c
 
 >It's the stories we tell!
 
-Digging deeper, we looked at crime across different categories, locations and police disctricts and realized that it's possible to slice and dice the information to suit many narratives. You can go thru the [detailed analysis below](https://github.com/fazeelgm/UCB_ML_AI_Capstone/blob/main/README.md#doom-loop-trends--scenarios) - but the gist of what I found can be seen in this graphic showing the SFPD's crime resolution rate for the top-10 crime categories by precinct - responsiveness likely creates a positive outlook while cases backing up frustrates public pereception as well as reporting of crimes, aka Doom Loop! YOu can see that during Covid, case resolution lagged across all categories, but has been picking up since then. So statffing is important but we cannot deduce that from this data. Looking specifically at the Tenderloin district, a historically troubled area, we can see the extra attention being paid this year - perhaps due to all the attention from a tough mayoral race!
+Digging deeper, we looked at crime across different categories, locations and police disctricts and realized that it's possible to slice and dice the information to suit many narratives. You can go thru the [detailed analysis below](https://github.com/fazeelgm/UCB_ML_AI_Capstone/blob/main/README.md#doom-loop-ground-reality) - but the gist of what I found can be seen in this graphic showing the SFPD's crime resolution rate for the top-10 crime categories by precinct - responsiveness likely creates a positive outlook while cases backing up frustrates public pereception as well as reporting of crimes, aka Doom Loop! You can see that during Covid, case resolution lagged across all categories, but has been picking up since then. So staffing could be important but we cannot deduce that from this data. Looking specifically at the Tenderloin district, a historically troubled area, we can see the extra attention being paid this year - perhaps due to all the attention from a tough mayoral race!
 
 <table style="width:100%"><tr>
   <td width="100%"><em>Figure TO_DO: Incident Resolution by Police District by Year</em>
     <img src="images/incidents_resolutions_by_pd_by_year.png" border="0"/></td>
 </tr></table>
 
-This is a very high-level synopsis of my findings, I invite you to read the rest of this Summary Report and then dive deeper into the associated notebooks - there is a lot of interesting data, especially for anyone who's walked the streets of San Francisco!
+This is a very high-level synopsis of my findings, I invite you to read the rest of this Summary Report and dive deeper into the associated notebooks - there is a lot of interesting data, especially for anyone who's walked the streets of San Francisco!
 
 # The Data - SFPD Daily Crime Incidents Reports
 
