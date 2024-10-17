@@ -10,18 +10,20 @@ UC Berkeley ML/AI Professional Certification coursework<br>
 Fazeel Mufti
 </p>
   
-**Resources**
+**Repository Structure**
 
 * [`ExploratoryDataAnalysis.ipynb`](https://github.com/fazeelgm/UCB_ML_AI_Capstone/blob/main/notebooks/ExploratoryDataAnalysis.ipynb)
   * Jupyter notebook containing the initial exploratory data analysis (EDA) of the dataset to develop a domain understanding
-  * Includes data retrieval and cleanup required before we can apply DS/ML techniques
+  * Summarized in the [The Data](https://github.com/fazeelgm/UCB_ML_AI_Capstone/blob/main/README.md#the-data---sfpd-daily-crime-incidents-reports) section below
 * [`ModelExploration.ipynb`](https://github.com/fazeelgm/UCB_ML_AI_Capstone/blob/main/notebooks/ModelExploration.ipynb)
   * Jupyter notebook detailing the Data Models that were explored
-  * Includes tuning various classification models and analysis of the wining `XGBClassifier` model
+  * Summarized in the [Model Development](https://github.com/fazeelgm/UCB_ML_AI_Capstone/blob/main/README.md#model-development) section below
 * [`ModelVisualizations.ipynb`](https://github.com/fazeelgm/UCB_ML_AI_Capstone/blob/main/notebooks/ModelVisualizations.ipynb)
-  * Visualizations developed to support the project story line
+  * Visualizations developed to support the Doom Loop story narative
+  * Summarized in the [Doom Loop? Ground Reality](https://github.com/fazeelgm/UCB_ML_AI_Capstone/blob/main/README.md#doom-loop-ground-reality) section below
 * `src` directory: Utility python code for the project
-* `data` directory: You can download this file to play with the data yourself or get the latest from SFGov links below
+* `data` directory: Sampled data (10%) or can get the latest from SFGov links below
+* `models` directory: Serialized models for production deployment
 
 ## Executive summary
 
@@ -40,7 +42,7 @@ You can read further in much detail, but in summary, the dataset contains almost
 
 Our task was to use this data to train different ML models on this data and then classify a set of incidents that the model had not seen and judge it on its prediction abilities. In the process, we wanted to get to the bottom of the Doom Loop charge - here's what we learnt!
 
-#### This is a hard problem!
+>This is a hard problem!
 
 After cleaning the data we were able to reduce it to 14 features that could then be used to classify each incident on a possible 45 crime categories. We identified and trained a set of ML Models that are suitable for multi-class classification problems of this type. After many optimization and tuning iterations, the winning `XGBClassifier` model achieved an Accuracy score of 35% (higher is better) with a LogLoss score of 2.3240 (lower is better, 0 being a perfect score) and were able improve our results by 206% (Accuracy) and 92.72% (LogLoss) over our baseline baseline. A single tuning run of the final model took over 4 hours to train on our hardware!
 
@@ -63,7 +65,7 @@ This shows us that the model is learning effectively and intuitively!
 
 This shows us that the model is learning effectively and intuitively!
 
-#### The more things change, the more they remain the same!
+>The more things change, the more they remain the same!
 
 We next looked at the daily rates of crime incidents to see if there were more crimes occuring around Covid - if anything, we foudn that the rate has actually slowed down! Looking at the trend line across all incidents in the left graph, it's difficult to tell if that is really the case, but when break it down by quarter to adjust for partial 2024 returns, we see that overall crime rates have come down in 20224 to the 2020 Covid levels and are lower than pre-Covid period of 2018-2019. This is good news! 
 
@@ -72,14 +74,9 @@ We next looked at the daily rates of crime incidents to see if there were more c
   <td width="50%"><img src="images/incidents_by_quarter.png" border="0"/></td>
 </tr></table>
 
-#### It's the stories we tell!
+>It's the stories we tell!
 
-Digging deeper, we looked at crime across different categories, locations and police disctricts and realized that it's possible to slice and dice the information to suit many narratives. There is a need to:
-
-* Build narratives that support ground reality
-* Refute False Narratives using data
-
-You can go thru the [detailed analysis below](https://github.com/fazeelgm/UCB_ML_AI_Capstone/blob/main/README.md#doom-loop-trends--scenarios) - but the gist of what I found can be seen in this graphic showing the SFPD's crime resolution rate for the top-10 crime categories by precinct - responsiveness likely creates a positive outlook while cases backing up frustrates public pereception as well as reporting of crimes, aka Doom Loop! YOu can see that during Covid, case resolution lagged across all categories, but has been picking up since then. So statffing is important but we cannot deduce that from this data. Looking specifically at the Tenderloin district, a historically troubled area, we can see the extra attention being paid this year - perhaps due to all the attention from a tough mayoral race!
+Digging deeper, we looked at crime across different categories, locations and police disctricts and realized that it's possible to slice and dice the information to suit many narratives. You can go thru the [detailed analysis below](https://github.com/fazeelgm/UCB_ML_AI_Capstone/blob/main/README.md#doom-loop-trends--scenarios) - but the gist of what I found can be seen in this graphic showing the SFPD's crime resolution rate for the top-10 crime categories by precinct - responsiveness likely creates a positive outlook while cases backing up frustrates public pereception as well as reporting of crimes, aka Doom Loop! YOu can see that during Covid, case resolution lagged across all categories, but has been picking up since then. So statffing is important but we cannot deduce that from this data. Looking specifically at the Tenderloin district, a historically troubled area, we can see the extra attention being paid this year - perhaps due to all the attention from a tough mayoral race!
 
 <table style="width:100%"><tr>
   <td width="100%"><em>Figure TO_DO: Incident Resolution by Police District by Year</em>
@@ -381,29 +378,52 @@ We prepared the tuned models for production deployment as follows:
 This allows us to preserve the hard-to-train models and make the deployment process scalable for production environments.
 
 # Doom Loop? Ground Reality
+
+We start exploring the Doom Loop story line by building our own narrative that is based on the facts coming from our dataset. First, we look at the crime distribution across the San Francisco by Police Districts. Here you see a map view and a breakdown of the top-10 crime categories across each police district. This gives us an idea of where to focus for the largest swath of crimes:
+
 <table style="width:100%"><em>Figure TO_DO: Police Districts at-a-glance</em>
 <tr>
   <td width="50%"><img src="images/sf_incidents_by_PD_map.png" border="0"/></td>
   <td width="50%"><img src="images/incidents_by_pd.png" border="0"/></td>
 </tr></table>
 
+Next we show the Top-5 crime category locations across our time span to get a sense of the richness of the datset from a dashboarding perspective - you can see the concentration in the north-east corner of the city. This is where we find the busiest precincts.
+
 <table style="width:100%"><tr>
   <td width="100%"><em>Figure TO_DO: SF Crime Categories By Location</em>
     <img src="images/sf_top_categorie_by_location_map.png" border="0"/></td>
 </tr></table>
+
+We now start to dig deeper into the Doom Loop Hypothesis to see how the incidence of the Top-5 crime categories is changing over the time period. We see that in most cases, the crime incidence dipping during Covid and 2024, and the overall trend is down. So far, so good!
 
 <table style="width:100%"><tr>
   <td width="100%"><em>Figure TO_DO: Top Categories by Police District by Year</em>
     <img src="images/incidents_by_pd_year.png" border="0"/></td>
 </tr></table>
 
+Next, we llok at the workload of the 10 police districts across the top-10 crime categories, and we see it follow the same pattern - dip during Covid and down in 2024. The overall workload of the busiest precincts is considerably higher than the western, lower population districts.
+
 <table style="width:100%"><tr>
   <td width="100%"><em>Figure TO_DO: Top Police District by Categories by Year</em>
     <img src="images/incidents_by_pd_by_category_year.png" border="0"/></td>
 </tr></table>
 
+In this final view of incident resolutions by precinct, we find something interesting - the clearance percentages of top crime categories has improved across the busy precincts:
+
+* Open / Active case counts are going down - our dataset doesn't tell us why that is happening
+  * This could suggest improved public perception of SFPD performance and attentiveness
+  * It could also suggest more officers on-board or on the beat after Covid lockdowns
+* The Tenderloin precinct, a historically high-crime neighborhood, shows a very high resolution rate in 2024!
+  * This could be due to the attention to the current drug and homelessness issues or the close mayoral race this year
 
 <table style="width:100%"><tr>
   <td width="100%"><em>Figure TO_DO: Incident Resolution by Police District by Year</em>
     <img src="images/incidents_resolutions_by_pd_by_year.png" border="0"/></td>
 </tr></table>
+
+From this exercise in building our investigation narrative around the Doom Loop Story, we learnt that it's possible to slice and dice the information to suit many narratives. There is a need to:
+
+* Build narratives that support ground reality using factual data
+* Refute False Narratives using data
+
+This exercise is a proof of the efficacy of such an approach!
