@@ -315,7 +315,7 @@ During the initial optimization runs, we tuned the parameters if the model didn'
 ## Model Evaluation & Interpretation
 
 <table style="width:100%"><tr>
-  <td width="100%"><em>Figure 11: Results Tally</em><img src="images/table_results_tally.png" border="0"/></td>
+  <td width="100%"><em>Figure 11: Results Tally - tuning the models</em><img src="images/table_results_tally.png" border="0"/></td>
 </tr></table>
 
 Evaluating the final tuned model scores, we see that:
