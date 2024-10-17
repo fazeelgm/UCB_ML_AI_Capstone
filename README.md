@@ -426,3 +426,13 @@ From this exercise in building our investigation narrative around the Doom Loop 
 * Refute False Narratives using data
 
 This exercise is a proof of the efficacy of such an approach!
+
+# Next Steps
+
+For this project, we mostly focused on using Data Science (DS) practices like CRISP-DM and Machine Learning (ML) techniques for multi-class classification and analyis tools. We were able to build a library of interesting facts, patterns and ML models that can be applied in production at scale, but had to admit that this was a hard problem to solve. There are some promising avenues to explore:
+
+1. Enrich the data with diverse features that can improve the model prediction capabilities. The [San Francisco Open Data](https://datasf.org/opendata/) initiative provides city-wide demographic, income and government services datasets that we can use to enrich our training dataset
+2. We demonstrated the SHAP explainability based on model prediction probabilities - this information can be feed into downstream deep learning systems like neural nets and LLMs that can look for patterns based on the probabilistic outcomes from our models
+3. The visualization techniques used in this project can be used to build dashboards to:
+   * Optimize SFPD workflows and staffing tools
+   * Share information with general public to build trust and engagement
