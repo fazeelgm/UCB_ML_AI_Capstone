@@ -43,6 +43,14 @@ This work is part of my Capstone Project for the UC Berkeley Artificial Inetllig
 <table style="width:100%"><tr>
   <td width="100%"><em>Figure TO_DO: Total of 894,585 incidents from 2018-01-01 00:00:00 to 2024-10-02 21:45:00</em><img src="images/incidents_per_day.png" border="0"/></td>
 </tr></table>
+<table style="width:100%"><tr>
+  <td width="100%"><em>Figure TO_DO: Total of 894,585 incidents from 2018-01-01 00:00:00 to 2024-10-02 21:45:00</em><img src="images/incidents_by_quarter.png" border="0"/></td>
+</tr></table>
+
+<table style="width:100%"><tr><em>Figure TO_DO: Feature importance, confusion matrix and decision tree (Click on image to see details)</em>
+  <td width="50%"><img src="images/incidents_per_day.png" border="0"/></td>
+  <td width="50%"><img src="images/incidents_by_quarter.png" border="0"/></td>
+</tr></table>
 
 #### It's the stories we tell!
 
@@ -360,9 +368,13 @@ This allows us to preserve the hard-to-train models and make the deployment proc
     <img src="images/incidents_by_pd_year.png" border="0"/></td>
 </tr></table>
 
-
 <table style="width:100%"><tr>
   <td width="100%"><em>Figure TO_DO: Top Police District by Categories by Year</em>
     <img src="images/incidents_by_pd_by_category_year.png" border="0"/></td>
 </tr></table>
 
+
+<table style="width:100%"><tr>
+  <td width="100%"><em>Figure TO_DO: Incident Resolution by Police District by Year</em>
+    <img src="images/incidents_resolutions_by_pd_by_year.png" border="0"/></td>
+</tr></table>
